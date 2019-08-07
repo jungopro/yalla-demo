@@ -21,7 +21,7 @@ cd yalla-demo/aks
 
 ### TerraformIT
 
-```bash
+```console
 terraform init
 terraform apply -var=client_secret=<your-client-secret> -var=kubeconfig_path="/root/.kube/demo-aks.yaml"
 ```
@@ -34,7 +34,7 @@ terraform apply -var=client_secret=<your-client-secret> -var=kubeconfig_path="/r
 
 ### Deploy Istio
 
-```bash
+```console
 helm init --service-account tiller
 kubectl get pod -n kube-system -l name=tiller # verify tiller is running
 helm version
@@ -49,7 +49,7 @@ kubectl get svc -n istio-system # make sure istio-ingress has a valid loadbalanc
 
 ### Enable automatic sidecar injection
 
-```bash
+```console
 kubectl label namespace default istio-injection=enabled
 ```
 
@@ -57,19 +57,19 @@ kubectl label namespace default istio-injection=enabled
 
 ### Service Mesh Visualization
 
-```bash
+```console
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=kiali -o jsonpath='{.items[0].metadata.name}') 20001:20001 # open http://localhost:20001/kiali/console/ with admin:admin
 ```
 
 ### Distributed Tracing
 
-```bash
+```console
 kubectl port-forward -n istio-system $(kubectl get pod -n istio-system -l app=jaeger -o jsonpath='{.items[0].metadata.name}') 16686:16686 # jaeger
 ```
 
 ### Metrics
 
-```bash
+```console
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') 9090:9090 # prometheus
 
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 # grafana
@@ -78,18 +78,18 @@ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=gr
 ### Traffic Routing
 
 - Route only to v1:
-  ```bash
+  ```console
   kubectl apply -f 04-virtual-service-all-v1.yaml --namespace default
   ```
 
 - Route user Jason to v1 and v2
-  ```bash
+  ```console
   kubectl apply -f 05-virtual-service-reviews-test-v2.yaml --namespace default
   ```
 
 ### Remove all resources and destroy the cluster
 
-```bash
+```console
 cd aks
 terraform destroy -var=client_secret=<your-client-secret> -var=kubeconfig_path="/root/.kube/demo-aks.yaml"
 ```
