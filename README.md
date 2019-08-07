@@ -82,7 +82,7 @@ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=gr
   kubectl apply -f 04-virtual-service-all-v1.yaml --namespace default
   ```
 
-- Route user Json to v1 and v2
+- Route user Jason to v1 and v2
   ```bash
   kubectl apply -f 05-virtual-service-reviews-test-v2.yaml --namespace default
   ```
