@@ -15,8 +15,8 @@ Yalla DevOps 2019 Demo
 ### Clone the repo and switch to the AKS folder
 
 ```bash
-git clone https://github.com/jungopro/yalla-demo.git
-cd yalla-demo/aks
+$ git clone https://github.com/jungopro/yalla-demo.git
+$ cd yalla-demo/aks
 ```
 
 ### TerraformIT
