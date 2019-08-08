@@ -75,16 +75,26 @@ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=pr
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 # grafana
 ```
 
-### Traffic Routing
+### Traffic Shifting
 
 - Route only to v1:
   ```bash
   kubectl apply -f 04-virtual-service-all-v1.yaml --namespace default
   ```
 
-- Route user Json to v1 and v2
+- Route user Jason to v1 and v2 (reviews service)
   ```bash
   kubectl apply -f 05-virtual-service-reviews-test-v2.yaml --namespace default
+  ```
+
+- Route 80% of traffic to v1 and 20% to v2 (reviews service)
+  ```bash
+  kubectl apply -f 06-virtual-service-reviews-80-20.yaml --namespace default
+  ```
+
+- Route 90% of traffic to v1 and 10% to v2 (reviews service)
+  ```bash
+  kubectl apply -f 06-virtual-service-reviews-80-20.yaml --namespace default
   ```
 
 ### Remove all resources and destroy the cluster
