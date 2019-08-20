@@ -30,9 +30,4 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.cluster_ca_certificate)
 }
 
-terraform {
-  required_version = ">= 0.12"
-  backend "azurerm" {}
-}
-
 data "azurerm_client_config" "current" {}

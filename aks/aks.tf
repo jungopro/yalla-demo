@@ -13,10 +13,6 @@ resource "azurerm_virtual_network" "vnet" {
   location            = azurerm_resource_group.resource_group.location
   resource_group_name = azurerm_resource_group.resource_group.name
   address_space       = var.vnet_address_space
-
-  tags = {
-    environment = "dev"
-  }
 }
 
 resource "azurerm_public_ip" "ingress_ip" {
@@ -26,10 +22,6 @@ resource "azurerm_public_ip" "ingress_ip" {
 
   allocation_method = "Static"
   domain_name_label = "${azurerm_resource_group.resource_group.name}-istio"
-
-  tags = {
-    environment = "istio"
-  }
 }
 
 resource "azurerm_subnet" "aks_subnet" {
@@ -37,22 +29,6 @@ resource "azurerm_subnet" "aks_subnet" {
   resource_group_name  = azurerm_resource_group.resource_group.name
   address_prefix       = var.aks_subnet_address
   virtual_network_name = azurerm_virtual_network.vnet.name
-}
-
-resource "azurerm_subnet" "vk_subnet" {
-  name                 = "${var.vk_subnet_name}-${terraform.workspace}"
-  resource_group_name  = azurerm_resource_group.resource_group.name
-  address_prefix       = var.vk_subnet_address
-  virtual_network_name = azurerm_virtual_network.vnet.name
-
-  delegation {
-    name = "aciDelegation"
-
-    service_delegation {
-      name    = "Microsoft.ContainerInstance/containerGroups"
-      actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
-    }
-  }
 }
 
 resource "azurerm_kubernetes_cluster" "aks" {
@@ -93,15 +69,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
   role_based_access_control {
     enabled = true
   }
+}
 
-  addon_profile {
-    aci_connector_linux {
-      enabled     = true
-      subnet_name = azurerm_subnet.vk_subnet.name
-    }
-  }
-
-  tags = {
-    environment = "istio"
-  }
+output "external_ip" {
+  value = azurerm_public_ip.ingress_ip.ip_address
 }
