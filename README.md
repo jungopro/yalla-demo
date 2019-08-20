@@ -8,7 +8,9 @@ Yalla DevOps 2019 Demo
 
 - Azure Account
 - Terraform Knowledge
-- [Terraform Service Account with proper permissions on the Azure Subscription](https://www.terraform.io/docs/providers/azurerm/auth/service_principal_client_secret.html)
+- Terraform Cloud Account for remote state (Free, see [here](https://www.terraform.io/docs/enterprise/index.html))
+- Terraform Service Account with proper permissions on the Azure Subscription. See [here](https://www.terraform.io/docs/providers/azurerm/auth/service_principal_client_secret.html)
+- kubectl [installed](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
 ## Setup a cluster using Terraform
 
@@ -19,16 +21,20 @@ git clone https://github.com/jungopro/yalla-demo.git
 cd yalla-demo/aks
 ```
 
+create your own terraform values file with the following information:
+
+
+
 ### TerraformIT
 
 ```console
 terraform init
-terraform apply -var=client_secret=<your-client-secret> -var=kubeconfig_path="/root/.kube/demo-aks.yaml"
+terraform apply -var=client_secret=<your-client-secret> -var=kubeconfig_path="/root/.kube/demo-aks.yaml" -var=ssh_public_key="/full/path/to/ssh/publc/key.pub"
 ```
 
 ### Connect to your cluster
 
-- add the new cluster to your config (e.g. `export KUBECONFIG=/root/.kube/demo-aks.yaml`)
+- add the new cluster to your config (e.g. `export KUBECONFIG=$KUBECONFIG:/root/.kube/demo-aks.yaml`)
 - switch to your cluster (e.g. `kubectl config set-context demo-aks`)
 - verify cluster is healthy and nodes are up (`kubectl get nodes`)
 
@@ -41,8 +47,8 @@ helm version
 cd ../
 helm install istio-init/ --name istio-init --namespace istio-system
 kubectl get pod -n istio-system
-kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l # verify 53 CRDs created
-helm install istio/ --name istio --namespace istio-system --values istio/values-istio-demo.yaml --set gateways.istio-ingressgateway.loadBalancerIP="<static-ip-in-aks-resource-group>" --debug
+kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l # verify 23 CRDs created
+helm install istio/ --name istio --namespace istio-system --values istio/values-istio-demo.yaml --set gateways.istio-ingressgateway.loadBalancerIP="{external_ip output from terraform run}" --debug
 kubectl get pod -n istio-system # make sure all pods are running
 kubectl get svc -n istio-system # make sure istio-ingress has a valid loadbalancer external IP
 ```
@@ -54,6 +60,16 @@ kubectl label namespace default istio-injection=enabled
 ```
 
 ## Bookinfo
+
+### Install Application
+
+```console
+kubectl apply -f 01-bookinfo.yaml
+kubectl apply -f 02-bookinfo-gateway.yaml
+kubectl apply -f 03-destination-rule-all.yaml
+```
+
+Verify the application is working by navigating to http://{external_ip output from terraform run}/productpage
 
 ### Service Mesh Visualization
 
@@ -94,8 +110,16 @@ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=gr
 
 - Route 90% of traffic to v1 and 10% to v2 (reviews service)
   ```console
-  kubectl apply -f 06-virtual-service-reviews-80-20.yaml --namespace default
+  kubectl apply -f 07-virtual-service-reviews-90-10.yaml --namespace default
   ```
+
+### Fault injection
+
+Prevent user Jason from reaching the ratings service
+
+```console
+kubectl apply -f 08-virtual-service-ratings-test-abort.yaml --namespace default
+```
 
 ### Remove all resources and destroy the cluster
 
