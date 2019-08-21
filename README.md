@@ -55,9 +55,9 @@ kubectl get svc -n istio-system # make sure istio-ingress has a valid loadbalanc
 kubectl label namespace default istio-injection=enabled
 ```
 
-## Bookinfo
+## Applications
 
-### Install Applications
+### Installation
 
 ```console
 kubectl apply -f 01-bookinfo.yaml
@@ -91,7 +91,7 @@ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=pr
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 # grafana
 ```
 
-### Traffic Shifting
+### Traffic Shifting (Bookinfo)
 
 - Route only to v1:
   ```console
@@ -113,7 +113,7 @@ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=gr
   kubectl apply -f 07-virtual-service-reviews-90-10.yaml --namespace default
   ```
 
-### Fault injection
+### Fault injection (Bookinfo)
 
 Prevent user Jason from reaching the ratings service
 
