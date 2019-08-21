@@ -118,6 +118,11 @@ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=gr
 Prevent user Jason from reaching the ratings service
 
 ```console
+kubectl delete -f 04-virtual-service-all-v1.yaml --namespace default
+kubectl delete -f 05-virtual-service-reviews-test-v2.yaml --namespace default
+kubectl delete -f 06-virtual-service-reviews-80-20.yaml --namespace default
+kubectl delete -f 07-virtual-service-reviews-90-10.yaml --namespace default
+kubectl apply -f 03-destination-rule-all.yaml
 kubectl apply -f 08-virtual-service-ratings-test-abort.yaml --namespace default
 ```
 
