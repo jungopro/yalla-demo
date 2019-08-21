@@ -27,3 +27,13 @@ steps:
 - task: TerraformInstaller@0
   inputs:
     terraformVersion: '$(TERRAFORM-VERSION)'
+- task: TerraformCLI@0
+  inputs:
+    command: 'init'
+    commandOptions: '-get=true -upgrade=true'
+    backendType: 'azurerm'
+    backendServiceArm: 'Azure'
+    backendAzureRmResourceGroupName: 'DevOps'
+    backendAzureRmStorageAccountName: '$(sa-name)'
+    backendAzureRmContainerName: '$(blob-name)'
+    backendAzureRmKey: 'yalla-demo.tfstate'
