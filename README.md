@@ -68,7 +68,8 @@ kubectl label namespace hipster istio-injection=enabled
 kubectl apply -f hipster-shop/ --namespace hipster
 ```
 
-Verify the application is working by navigating to http://{external_ip output from terraform run}/productpage
+- Verify the **bookinfo** application is working by navigating to http://*{external_ip output from terraform run}*/productpage
+- Verify the **hipster shop** application is working by navigating to http://*{external_ip output from terraform run}*:31400
 
 ### Service Mesh Visualization
 
