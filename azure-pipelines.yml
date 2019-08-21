@@ -4,8 +4,14 @@
 # https://aka.ms/yaml
 
 name: $(Date:yyyyMMdd)$(Rev:.r)
-trigger: [master]
-pr: none
+
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    exclude:
+    - azure-pipelines.yml
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -20,4 +26,4 @@ steps:
     keyVaultName: DevOps-Terraform-KV
 - task: TerraformInstaller@0
   inputs:
-    terraformVersion: '$TERRAFORM-VERSION'
+    terraformVersion: '$(TERRAFORM-VERSION)'
