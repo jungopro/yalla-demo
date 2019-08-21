@@ -131,5 +131,6 @@ kubectl apply -f 08-virtual-service-ratings-test-abort.yaml --namespace default
 ```console
 cd aks
 helm delete istio --purge
+# verify the loadbalancer object in azure has been deleted before running the next command. it may take 2-3 minutes
 terraform destroy -var=client_secret=<your-client-secret> -var=kubeconfig_path="/root/.kube/demo-aks.yaml"
 ```
