@@ -21,20 +21,24 @@ steps:
 # Azure Key Vault
 # Download Azure Key Vault secrets
 - task: AzureKeyVault@1
-  displayName: 'Download Connection Secrets from Azure Key Vault'
+  displayName: Download Connection Secrets from Azure Key Vault
   inputs:
     azureSubscription: Azure
     keyVaultName: DevOps-Terraform-KV
+- task: DownloadSecureFile@1
+  displayName: Download SSH Public Key
+  inputs:
+    secureFile: 'id_rsa.pub'
 - task: TerraformInstaller@0
-  displayName: 'Install Terraform Version $(TERRAFORM-VERSION)'
+  displayName: Install Terraform Version $(TERRAFORM-VERSION)
   inputs:
     terraformVersion: '$(TERRAFORM-VERSION)'
 - script: terraform init -get=true -upgrade=true -backend-config='storage_account_name=$(sa-name)' -backend-config='container_name=$(blob-name)' -backend-config='access_key=$(sa-key)' -backend-config='key=$(state-key)'
   workingDirectory: '$(Build.SourcesDirectory)/aks'
-  displayName: 'Initalize Terraform'
+  displayName: Initalize Terraform
 - script: 'terraform validate'
   workingDirectory: '$(Build.SourcesDirectory)/aks'
-  displayName: 'Validate Terraform Code'
+  displayName: Validate Terraform Code
 - script: 'terraform plan -var=client_secret=$(client-secret) -var=kubeconfig_path=~/.kube/aks.yaml -var=ssh_public_key=$(Agent.TempDirectory)/id_rsa.pub -lock=true -out=terraform.plan'
-  displayName: 'Terraform Dry Run (Plan)'
+  displayName: Terraform Dry Run (Plan)
   workingDirectory: '$(Build.SourcesDirectory)/aks'
