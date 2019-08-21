@@ -64,6 +64,7 @@ kubectl apply -f 01-bookinfo.yaml
 kubectl apply -f 02-bookinfo-gateway.yaml
 kubectl apply -f 03-destination-rule-all.yaml
 kubectl create ns hipster
+kubectl label namespace hipster istio-injection=enabled
 kubectl apply -f hipster-shop/ --namespace hipster
 ```
 
