@@ -21,10 +21,6 @@ git clone https://github.com/jungopro/yalla-demo.git
 cd yalla-demo/aks
 ```
 
-create your own terraform values file with the following information:
-
-
-
 ### TerraformIT
 
 ```console
@@ -61,12 +57,14 @@ kubectl label namespace default istio-injection=enabled
 
 ## Bookinfo
 
-### Install Application
+### Install Applications
 
 ```console
 kubectl apply -f 01-bookinfo.yaml
 kubectl apply -f 02-bookinfo-gateway.yaml
 kubectl apply -f 03-destination-rule-all.yaml
+kubectl create ns hipster
+kubectl apply -f hipster-shop/ --namespace hipster
 ```
 
 Verify the application is working by navigating to http://{external_ip output from terraform run}/productpage
@@ -125,5 +123,6 @@ kubectl apply -f 08-virtual-service-ratings-test-abort.yaml --namespace default
 
 ```console
 cd aks
+helm delete istio --purge
 terraform destroy -var=client_secret=<your-client-secret> -var=kubeconfig_path="/root/.kube/demo-aks.yaml"
 ```
