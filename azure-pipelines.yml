@@ -21,19 +21,14 @@ steps:
 # Azure Key Vault
 # Download Azure Key Vault secrets
 - task: AzureKeyVault@1
+  displayName: 'Download Connection Secrets from Azure Key Vault'
   inputs:
     azureSubscription: Azure
     keyVaultName: DevOps-Terraform-KV
 - task: TerraformInstaller@0
+  displayName: 'Install Terraform Version $(TERRAFORM-VERSION)'
   inputs:
     terraformVersion: '$(TERRAFORM-VERSION)'
-- task: TerraformCLI@0
-  inputs:
-    command: 'init'
-    commandOptions: '-get=true -upgrade=true'
-    backendType: 'azurerm'
-    backendServiceArm: 'Azure'
-    backendAzureRmResourceGroupName: 'DevOps'
-    backendAzureRmStorageAccountName: '$(sa-name)'
-    backendAzureRmContainerName: '$(blob-name)'
-    backendAzureRmKey: 'yalla-demo.tfstate'
+- script: terraform init -get=true -upgrade=true -backend-config='storage_account_name=$(sa-name)' -backend-config='container_name=$(blob-name)' -backend-config='access_key=$(sa-key)' -backend-config='key=$(state-key)'
+  workingDirectory: '$(Build.SourcesDirectory)/aks'
+  displayName: 'Initalize Terraform'
