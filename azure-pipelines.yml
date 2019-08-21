@@ -39,6 +39,6 @@ steps:
 - script: 'terraform validate'
   workingDirectory: '$(Build.SourcesDirectory)/aks'
   displayName: Validate Terraform Code
-- script: 'terraform plan -var=client_id=$(client-id) -var=client_secret=$(client-secret) -var=subscription_id=$(subscription-id) -var=tenant_id=$(tenant-id) -var=kubeconfig_path=~/.kube/aks.yaml -var=ssh_public_key=$(Agent.TempDirectory)/id_rsa.pub -lock=true -out=terraform.plan'
-  displayName: Terraform Dry Run (Plan)
-  workingDirectory: '$(Build.SourcesDirectory)/aks'
+# - script: 'terraform plan -var=client_id=$(client-id) -var=client_secret=$(client-secret) -var=subscription_id=$(subscription-id) -var=tenant_id=$(tenant-id) -var=kubeconfig_path=~/.kube/aks.yaml -var=ssh_public_key=$(Agent.TempDirectory)/id_rsa.pub -lock=true -out=terraform.plan'
+#   displayName: Terraform Dry Run (Plan)
+#   workingDirectory: '$(Build.SourcesDirectory)/aks'
