@@ -1,5 +1,7 @@
 # Yalla-Demo
 
+[![Build Status](https://dev.azure.com/jungodevops/Yalla-Demo/_apis/build/status/jungopro.yalla-demo?branchName=master)](https://dev.azure.com/jungodevops/Yalla-Demo/_build/latest?definitionId=17&branchName=master)
+
 Yalla DevOps 2019 Demo
 
 **Please note that running this demo will incur costs in Azure**
