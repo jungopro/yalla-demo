@@ -71,7 +71,12 @@ kubectl apply -f hipster-shop/ --namespace hipster
 ```
 
 - Verify the **bookinfo** application is working by navigating to http://*{external_ip output from terraform run}*/productpage
+
+![bookinfo-diagram](https://istio.io/docs/examples/bookinfo/noistio.svg)
+
 - Verify the **hipster shop** application is working by navigating to http://*{external_ip output from terraform run}*:31400
+
+![hipster-shop](https://github.com/GoogleCloudPlatform/microservices-demo/blob/master/docs/img/architecture-diagram.png)
 
 ### Service Mesh Visualization
 
