@@ -8,7 +8,7 @@ Yalla DevOps 2019 Demo
 
 ## Prerequisites
 
-- Azure Account
+- Azure Account with [Preview AKS features enabled](https://github.com/Azure/azure-cli-extensions/tree/master/src/aks-preview)
 - Terraform Knowledge
 - Terraform Cloud Account for remote state (Free, see [here](https://www.terraform.io/docs/enterprise/index.html))
 - Terraform Service Account with proper permissions on the Azure Subscription. See [here](https://www.terraform.io/docs/providers/azurerm/auth/service_principal_client_secret.html)
@@ -139,5 +139,5 @@ kubectl apply -f 08-virtual-service-ratings-test-abort.yaml --namespace default
 cd aks
 helm delete istio --purge
 # verify the loadbalancer object in azure has been deleted before running the next command. it may take 2-3 minutes
-terraform destroy -var=client_secret=<your-client-secret> -var=kubeconfig_path="/root/.kube/demo-aks.yaml"
+terraform destroy -var=client_secret=<your-client-secret> -var=kubeconfig_path="/root/.kube/demo-aks.yaml" -var=ssh_public_key="/full/path/to/ssh/publc/key.pub"
 ```
